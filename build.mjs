@@ -77,10 +77,16 @@ export function parseCaption(fileName) {
   }
   if (!segments.length) segments.push({ text: caption, tone: 'neutral' });
 
+  // Короткі фрази для підпису: спершу плюси, потім мінуси, без службових слів.
+  const tidy = (t) => t
+    .replace(MARK, '').replace(/^(але|а|і)\s+/iu, '').replace(/^(не\s+)?подоба[єе]ть?с?я\s*:?\s*/iu, '')
+    .replace(/^о?крім\s+/iu, '').replace(/[\s,;:]+$/u, '').trim();
+  const likes = segments.filter((s) => s.tone === 'like').map((s) => tidy(s.text)).filter(Boolean);
+  const dislikes = segments.filter((s) => s.tone === 'dislike').map((s) => tidy(s.text)).filter(Boolean);
   const like = segments.some((s) => s.tone === 'like');
   const dislike = segments.some((s) => s.tone === 'dislike');
   const group = like && dislike ? 'mixed' : like ? 'like' : dislike ? 'dislike' : 'neutral';
-  return { caption, segments, group };
+  return { caption, segments, group, likes, dislikes };
 }
 
 async function scanImages(slug, sub) {
@@ -101,7 +107,7 @@ async function scanImages(slug, sub) {
   return out.sort((a, b) => a.caption.localeCompare(b.caption, 'uk'));
 }
 
-// Ручні правки з room.json → "photoOverrides": { "файл.jpg": { "caption": "новий підпис", "tone": "like|dislike|neutral", "note": "..." } }
+// Ручні правки з room.json → "photoOverrides": { "файл.jpg": { "like": "що подобається", "dislike": "що ні", "caption": "новий підпис", "tone": "like|dislike|neutral", "note": "..." } }
 // Для підписів на кшталт «те саме», з яких тон не зрозумілий.
 function applyOverrides(list, overrides, slug) {
   if (!overrides) return list;
@@ -112,6 +118,11 @@ function applyOverrides(list, overrides, slug) {
     if (o.caption) {
       const parsed = parseCaption(o.caption + path.extname(p.file));
       p.caption = parsed.caption; p.segments = parsed.segments; p.group = parsed.group;
+    }
+    if (o.like !== undefined || o.dislike !== undefined) {
+      p.likes = o.like ? [o.like] : [];
+      p.dislikes = o.dislike ? [o.dislike] : [];
+      p.group = p.likes.length && p.dislikes.length ? 'mixed' : p.likes.length ? 'like' : p.dislikes.length ? 'dislike' : 'neutral';
     }
     if (o.tone) {
       if (!['like', 'dislike', 'neutral'].includes(o.tone)) { warn(`photoOverrides «${name}»: tone має бути like, dislike або neutral`); continue; }

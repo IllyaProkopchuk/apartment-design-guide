@@ -9,7 +9,13 @@
   G.loadGuide(ROOT, slug).then(render, function () { G.loadError(app, ROOT); });
 
   function empty(text) { return '<p class="empty">' + esc(text || 'Ще не визначено.') + '</p>'; }
-  function txt(v) { return v && String(v).trim() ? esc(v) : '<span class="empty">уточнити</span>'; }
+  // Площа й габарити показуються лише коли відомі (не «уточнити»).
+  function metaHTML(room) {
+    var parts = [];
+    if (typeof room.area === 'number') parts.push('<span>Площа: ' + esc(G.areaText(room)) + '</span>');
+    if (room.dimensions && !/уточн/i.test(room.dimensions)) parts.push('<span>Габарити: ' + esc(room.dimensions) + '</span>');
+    return parts.length ? '<div class="room-meta">' + parts.join('') + '</div>' : '';
+  }
   function list(items, emptyText) {
     items = (items || []).filter(Boolean);
     return items.length ? '<ul class="list">' + items.map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') + '</ul>' : empty(emptyText);
@@ -34,10 +40,7 @@
     var html = [];
 
     html.push('<header class="room-head"><h1>' + esc(room.name) + '</h1>' +
-      '<div class="room-meta">' + G.statusBadge(room.status) +
-      '<span>Площа: ' + esc(G.areaText(room)) + '</span>' +
-      '<span>Габарити: ' + esc(room.dimensions || 'уточнити') + '</span></div>' +
-      '<p class="muted small">Площі приблизні (±10%), точні розміри — у DWG дизайнера.</p></header>');
+      metaHTML(room) + '</header>');
 
     html.push('<div class="room-layout"><div class="room-body">');
 
@@ -60,8 +63,10 @@
       : empty('Ще не визначено. Орієнтир — загальна палітра квартири на головній.')));
 
     // 3. Матеріали
-    html.push(section(3, 'materials', 'Матеріали',
-      '<dl class="kv"><dt>Підлога</dt><dd>' + txt(mat.floor) + '</dd><dt>Стіни</dt><dd>' + txt(mat.walls) + '</dd><dt>Стеля</dt><dd>' + txt(mat.ceiling) + '</dd></dl>'));
+    var matRows = [['Підлога', mat.floor], ['Стіни', mat.walls], ['Стеля', mat.ceiling]].filter(function (m) { return m[1] && String(m[1]).trim(); });
+    html.push(section(3, 'materials', 'Матеріали', matRows.length
+      ? '<dl class="kv">' + matRows.map(function (m) { return '<dt>' + m[0] + '</dt><dd>' + esc(m[1]) + '</dd>'; }).join('') + '</dl>'
+      : empty()));
 
     // 4. Меблі й світло
     html.push(section(4, 'furniture', 'Меблі й світло',
@@ -76,7 +81,7 @@
     html.push('<aside class="room-aside" aria-label="Інші кімнати"><div class="card sticky"><h2>Де це на плані</h2>' +
       G.planSVG(d.rooms, { root: ROOT, current: slug, compact: true, image: d.site.planImage }) +
       '<ul class="room-nav">' + d.rooms.map(function (r) {
-        return '<li><a href="' + esc(G.roomHref(ROOT, r)) + '"' + (r.slug === slug ? ' aria-current="page"' : '') + '><span>' + esc(r.name) + '</span>' + G.statusBadge(r.status) + '</a></li>';
+        return '<li><a href="' + esc(G.roomHref(ROOT, r)) + '"' + (r.slug === slug ? ' aria-current="page"' : '') + '><span>' + esc(r.name) + '</span></a></li>';
       }).join('') + '</ul></div></aside>');
 
     html.push('</div>');
@@ -91,30 +96,30 @@
     { key: 'neutral', title: 'Нейтральне' }
   ];
 
-  // Підпис показуємо дослівно (це наш коментар), частини підсвічені за тоном.
+  // Підпис: рядок «+» (що подобається), потім рядок «−» (що ні).
   function captionHTML(p) {
-    return '<span class="cap">' + p.segments.map(function (s) {
-      var icon = s.tone === 'like' ? '<span class="seg-icon" aria-hidden="true">+</span>'
-        : s.tone === 'dislike' ? '<span class="seg-icon" aria-hidden="true">−</span>' : '';
-      var sr = s.tone === 'like' ? '<span class="sr">подобається: </span>'
-        : s.tone === 'dislike' ? '<span class="sr">не подобається: </span>' : '';
-      return '<span class="seg seg--' + s.tone + '">' + icon + sr + esc(s.text) + '</span>';
-    }).join(' ') + '</span>';
+    var likes = p.likes || [], dislikes = p.dislikes || [];
+    if (!likes.length && !dislikes.length) return '<span class="cap">' + esc(p.caption) + '</span>';
+    return (likes.length ? '<span class="cap-line cap-like"><span class="cap-icon" aria-label="подобається">+</span><span>' + esc(likes.join(', ')) + '</span></span>' : '') +
+      (dislikes.length ? '<span class="cap-line cap-dislike"><span class="cap-icon" aria-label="не подобається">−</span><span>' + esc(dislikes.join(', ')) + '</span></span>' : '');
   }
 
-  var REF_LEGEND = '<p class="ref-legend small muted">Підписи — наші коментарі до фото, дослівно. ' +
-    '<span class="seg seg--like"><span class="seg-icon" aria-hidden="true">+</span>подобається</span> ' +
-    '<span class="seg seg--dislike"><span class="seg-icon" aria-hidden="true">−</span>не подобається</span></p>';
+  function plainCaption(p) {
+    var t = [];
+    if ((p.likes || []).length) t.push('+ ' + p.likes.join(', '));
+    if ((p.dislikes || []).length) t.push('− ' + p.dislikes.join(', '));
+    return t.length ? t.join('   ') : p.caption;
+  }
 
   function figure(p, cls) {
-    return '<li><figure class="ref ' + cls + '"><button type="button" class="ref-open" data-src="' + esc(ROOT + p.src) + '" data-caption="' + esc(p.caption) + '">' +
-      '<img loading="lazy" src="' + esc(ROOT + p.src) + '" alt="' + esc(p.caption) + '"></button>' +
+    return '<li><figure class="ref ' + cls + '"><button type="button" class="ref-open" data-src="' + esc(ROOT + p.src) + '" data-caption="' + esc(plainCaption(p)) + '">' +
+      '<img loading="lazy" src="' + esc(ROOT + p.src) + '" alt="' + esc(plainCaption(p)) + '"></button>' +
       '<figcaption>' + captionHTML(p) + (p.note ? '<span class="ref-note">' + esc(p.note) + '</span>' : '') + '</figcaption></figure></li>';
   }
 
   function galleryHTML(photos) {
     if (!photos.length) return empty('Референсів ще немає.');
-    return REF_LEGEND + GROUPS.map(function (g) {
+    return GROUPS.map(function (g) {
       var items = photos.filter(function (p) { return p.group === g.key; });
       if (!items.length) return '';
       return '<div class="gallery-group"><h3>' + esc(g.title) + ' <span class="count">' + items.length + '</span></h3>' +

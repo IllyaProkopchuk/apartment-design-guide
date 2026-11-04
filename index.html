@@ -19,12 +19,8 @@
   <main id="main" class="wrap">
     <section class="section" aria-labelledby="intro-title">
       <h1 id="intro-title">Візуальний гід по дизайну квартири</h1>
-      <p class="lead">Тут зібрано, як ми бачимо кожну кімнату: настрій, палітру, матеріали, референси й відкриті питання. Статус показує, на якому етапі рішення.</p>
+      <p class="lead">Тут зібрано, як ми бачимо кожну кімнату: настрій, палітру, матеріали, референси й відкриті питання. </p>
       <ul class="facts" id="facts"></ul>
-      <div class="notice" role="note">
-        <span class="notice-icon" aria-hidden="true">≈</span>
-        <p><strong>Площі приблизні: похибка до ±10%.</strong><span id="area-note">Точні розміри й площі — у DWG-кресленні дизайнера.</span></p>
-      </div>
     </section>
 
     <section class="section" aria-labelledby="plan-title">
@@ -34,15 +30,13 @@
       <div class="plan-frame">
         <div id="plan"><p class="empty">Завантаження плану…</p></div>
       </div>
-      <p class="plan-caption" id="plan-caption">Кольором позначено кімнати та їхній статус. Натисніть на кімнату, щоб відкрити її сторінку.</p>
+      <p class="plan-caption" id="plan-caption">Натисніть на кімнату, щоб відкрити її сторінку.</p>
       <p class="plan-caption" id="plan-pdf"></p>
-      <div id="legend"></div>
     </section>
 
     <section class="section" aria-labelledby="rooms-title">
       <div class="section-head">
         <h2 id="rooms-title">Кімнати</h2>
-        <span class="progress" id="progress"></span>
       </div>
       <ul class="room-grid" id="rooms"></ul>
     </section>
@@ -50,7 +44,6 @@
     <section class="section" aria-labelledby="palette-title">
       <div class="section-head">
         <h2 id="palette-title">Загальна палітра квартири</h2>
-        <span id="palette-status"></span>
       </div>
       <p class="muted" id="palette-note"></p>
       <ul class="swatches" id="palette"></ul>
@@ -70,7 +63,7 @@
   </main>
 
   <footer class="site-footer">
-    <div class="wrap">Площі приблизні (±10%), точні дані — у DWG дизайнера. <span id="generated"></span></div>
+    <div class="wrap"><span id="generated"></span></div>
   </footer>
 
   <script src="data/bundle.js"></script>

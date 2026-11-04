@@ -338,3 +338,17 @@ main { padding: 32px 0 64px; }
 .plan-svg.is-compact .plan-room:hover polygon { fill: var(--brass); fill-opacity: .2; }
 .plan-svg.is-compact .plan-room.is-current polygon { fill: var(--brass); fill-opacity: .4; stroke: var(--wood); stroke-width: 8; stroke-dasharray: none; }
 .plan-svg .plan-room.is-dim { opacity: 1; }
+
+/* ---------- без статусів: план одним кольором ---------- */
+.plan-svg .plan-room polygon, .plan-svg .plan-room[class*="status-"] polygon { fill: var(--brass); stroke: var(--wood); fill-opacity: .16; stroke-width: 3; stroke-dasharray: none; }
+.plan-svg .plan-room:hover polygon { fill-opacity: .38; }
+.plan-svg .plan-label rect, .plan-svg .plan-label[class*="status-"] rect { fill: var(--surface); stroke: var(--wood); stroke-dasharray: none; }
+.room-nav a { justify-content: flex-start; }
+
+/* ---------- підписи до фото: «+» і «−» рядками ---------- */
+.ref figcaption { gap: 6px; }
+.cap-line { display: flex; gap: 8px; align-items: baseline; border-radius: 6px; padding: 4px 8px; }
+.cap-icon { font-weight: 800; flex: none; }
+.cap-like { background: var(--like-bg); color: #2c4d25; }
+.cap-dislike { background: var(--dislike-bg); color: #7d2a1f; }
+@media print { .cap-line { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }

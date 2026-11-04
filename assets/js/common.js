@@ -62,9 +62,9 @@
       if (!r.plan || !r.plan.length) return;
       var s = status(r.status);
       var cls = 'plan-room status-' + s.cls + (current === r.slug ? ' is-current' : '') + (current && current !== r.slug ? ' is-dim' : '');
-      out.push('<a class="' + cls + '" href="' + esc(roomHref(root, r)) + '" aria-label="' + esc(r.name + ' — статус: ' + s.label) + '"' +
+      out.push('<a class="' + cls + '" href="' + esc(roomHref(root, r)) + '" aria-label="' + esc(r.name) + '"' +
         (current === r.slug ? ' aria-current="page"' : '') + '>');
-      out.push('<title>' + esc(r.name + ' · ' + s.label) + '</title>');
+      out.push('<title>' + esc(r.name) + '</title>');
       r.plan.forEach(function (poly) {
         out.push('<polygon points="' + poly.map(function (p) { return p.join(','); }).join(' ') + '"/>');
       });
@@ -75,12 +75,11 @@
     // Підписи окремим шаром поверх зон, щоб не перекривалися сусідніми полігонами.
     labels.forEach(function (l) {
       var x = l.r.label[0], y = l.r.label[1];
-      var name = l.r.name, st = l.s.mark + ' ' + l.s.label;
-      var fs = 19, w = Math.max(name.length, st.length) * fs * 0.56 + 24, h = fs * 2.7;
+      var name = l.r.name;
+      var fs = 19, w = name.length * fs * 0.56 + 24, h = fs * 1.9;
       out.push('<a class="plan-label status-' + l.s.cls + '" href="' + esc(roomHref(root, l.r)) + '" tabindex="-1" aria-hidden="true">' +
         '<rect x="' + (x - w / 2) + '" y="' + (y - h / 2) + '" width="' + w + '" height="' + h + '" rx="10"/>' +
-        '<text class="t-name" x="' + x + '" y="' + (y - 2) + '" text-anchor="middle" font-size="' + fs + '">' + esc(name) + '</text>' +
-        '<text class="t-status" x="' + x + '" y="' + (y + fs) + '" text-anchor="middle" font-size="' + (fs - 3) + '">' + esc(st) + '</text></a>');
+        '<text class="t-name" x="' + x + '" y="' + (y + fs * 0.35) + '" text-anchor="middle" font-size="' + fs + '">' + esc(name) + '</text></a>');
     });
     out.push('</svg>');
     return out.join('');

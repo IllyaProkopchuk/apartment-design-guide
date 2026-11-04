@@ -14,24 +14,19 @@
       .map(function (k) { return '<li>' + esc(p[k]) + '</li>'; }).join('');
 
     $('plan').innerHTML = G.planSVG(d.rooms, { root: '', image: d.site.planImage });
-    if (d.site.planImage && d.site.planImage.caption) $('plan-caption').textContent = d.site.planImage.caption + '. Кольором позначено кімнати та їхній статус. Натисніть на кімнату, щоб відкрити її сторінку.';
-    $('legend').innerHTML = G.legendHTML();
+    if (d.site.planImage && d.site.planImage.caption) $('plan-caption').textContent = d.site.planImage.caption + '. Натисніть на кімнату, щоб відкрити її сторінку.';
     if (d.site.planPdf) $('plan-pdf').innerHTML = 'Планувальне рішення від дизайнера: <a href="' + esc(encodeURI(d.site.planPdf)) + '" target="_blank" rel="noopener">відкрити PDF</a>.';
 
-    var approved = d.rooms.filter(function (r) { return G.status(r.status).step === 2; }).length;
-    $('progress').textContent = 'Затверджено: ' + approved + ' з ' + d.rooms.length;
 
     $('rooms').innerHTML = d.rooms.map(function (r) {
       var refs = (d.photos[r.slug] || []).length;
       return '<li><a class="room-card" href="' + esc(G.roomHref('', r)) + '">' +
-        '<h3>' + esc(r.name) + '</h3>' + G.statusBadge(r.status) +
-        '<dl><dt>Площа</dt><dd>' + esc(G.areaText(r)) + '</dd>' +
-        '<dt>Габарити</dt><dd>' + esc(r.dimensions || 'уточнити') + '</dd>' +
+        '<h3>' + esc(r.name) + '</h3>' +
+        '<dl>' + (typeof r.area === 'number' ? '<dt>Площа</dt><dd>' + esc(G.areaText(r)) + '</dd>' : '') +
         '<dt>Референси</dt><dd>' + (refs ? refs : 'поки немає') + '</dd></dl></a></li>';
     }).join('');
 
     var pal = d.palette || {};
-    $('palette-status').innerHTML = pal.status ? G.statusBadge(pal.status) : '';
     $('palette-note').textContent = pal.note || '';
     $('palette').innerHTML = (pal.colors || []).map(function (c) {
       return '<li class="swatch"><div class="swatch-chip" style="background:' + esc(c.hex) + '"></div>' +
