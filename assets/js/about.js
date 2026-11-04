@@ -26,5 +26,6 @@
         }).join('') + '</div></section>');
     });
     app.innerHTML = html.join('');
+    G.hideLoader();
   }
 })();

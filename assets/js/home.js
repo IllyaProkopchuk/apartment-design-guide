@@ -8,6 +8,7 @@
   G.loadGuide('').then(render, function () { G.loadError($('plan'), ''); });
 
   function render(d) {
+    G.hideLoader();
     var ab = d.about || {};
     $('about-summary').innerHTML = (ab.summary || []).map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
 

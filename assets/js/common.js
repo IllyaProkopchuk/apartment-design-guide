@@ -132,7 +132,23 @@
     });
   }
 
+  /* ---------- лоадер «зараз, зараз» ---------- */
+  var loaderStart = (window.performance && performance.now) ? performance.now() : Date.now();
+  var LOADER_MIN_MS = 900;
+  function hideLoader() {
+    var el = document.getElementById('loader');
+    if (!el || el.classList.contains('is-done')) return;
+    var now = (window.performance && performance.now) ? performance.now() : Date.now();
+    setTimeout(function () {
+      el.classList.add('is-done');
+      setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
+    }, Math.max(0, LOADER_MIN_MS - (now - loaderStart)));
+  }
+  // Запобіжник: лоадер не висить довше 5 секунд, навіть якщо щось пішло не так.
+  setTimeout(hideLoader, 5000);
+
   function loadError(target, root) {
+    hideLoader();
     target.innerHTML = '<div class="error" role="alert"><strong>Не вдалося завантажити дані.</strong> ' +
       'Запустіть у папці проєкту <code>node build.mjs</code> і оновіть сторінку. ' +
       'Має зʼявитися файл <code>' + esc(root) + 'data/bundle.js</code>.</div>';
@@ -141,6 +157,6 @@
   window.Guide = {
     STATUS: STATUS, STATUS_ORDER: STATUS_ORDER, status: status, statusBadge: statusBadge,
     legendHTML: legendHTML, esc: esc, areaText: areaText, roomHref: roomHref, planSVG: planSVG,
-    loadGuide: loadGuide, loadError: loadError
+    loadGuide: loadGuide, loadError: loadError, hideLoader: hideLoader
   };
 })();

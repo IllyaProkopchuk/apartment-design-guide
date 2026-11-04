@@ -86,6 +86,7 @@
 
     html.push('</div>');
     app.innerHTML = html.join('');
+    G.hideLoader();
     setupLightbox();
   }
 
