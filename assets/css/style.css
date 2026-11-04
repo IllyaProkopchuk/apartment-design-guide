@@ -506,3 +506,7 @@ h2 { color: var(--walnut); }
 
 /* світлий контейнер: відступ зверху й знизу (.wrap перебивав padding у main) */
 main.wrap { padding-top: 32px; padding-bottom: 80px; }
+
+/* підвал: текст по центру і по горизонталі, і по вертикалі */
+.site-footer { padding: 0; }
+.site-footer .footer-end { min-height: 96px; display: flex; align-items: center; justify-content: center; text-align: center; }
