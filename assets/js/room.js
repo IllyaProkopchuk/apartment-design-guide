@@ -62,7 +62,8 @@
 
     // 1. Стиль і настрій
     var hasStyle = (style.directions || []).length || style.mood || (style.likes || []).length || (style.dislikes || []).length || (style.sections || []).length;
-    html.push(section(1, 'style', 'Стиль і настрій', !hasStyle ? empty() :
+    var num = 0;
+    html.push(section(++num, 'style', 'Стиль і настрій', !hasStyle ? empty() :
       ((style.directions || []).length ? '<ul class="chips">' + style.directions.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>' : '') +
       (style.mood ? '<p>' + esc(style.mood) + '</p>' : '') +
       briefHTML(style.likes, style.dislikes) +
@@ -72,7 +73,7 @@
 
     // 2. Палітра
     var pal = c.palette || [];
-    html.push(section(2, 'palette', 'Палітра', pal.length
+    html.push(section(++num, 'palette', 'Палітра', pal.length
       ? '<ul class="swatches">' + pal.map(function (p) {
           return '<li class="swatch"><div class="swatch-chip" style="background:' + esc(p.hex) + '"></div><b>' + esc(p.name) + '</b><code>' + esc(p.hex) + '</code><span>' + esc(p.note || '') + '</span></li>';
         }).join('') + '</ul>'
@@ -80,9 +81,9 @@
 
     // 3. Матеріали
     var matRows = [['Підлога', mat.floor], ['Стіни', mat.walls], ['Стеля', mat.ceiling]].filter(function (m) { return m[1] && String(m[1]).trim(); });
-    html.push(section(3, 'materials', 'Матеріали', matRows.length
-      ? '<dl class="kv">' + matRows.map(function (m) { return '<dt>' + m[0] + '</dt><dd>' + esc(m[1]) + '</dd>'; }).join('') + '</dl>'
-      : empty()));
+    // Порожні «Матеріали» не показуємо взагалі
+    if (matRows.length) html.push(section(++num, 'materials', 'Матеріали',
+      '<dl class="kv">' + matRows.map(function (m) { return '<dt>' + m[0] + '</dt><dd>' + esc(m[1]) + '</dd>'; }).join('') + '</dl>'));
 
     // 4. Меблі й світло
     // Порожню колонку (меблі чи світло) не показуємо
@@ -91,10 +92,10 @@
     if (has(c.furniture)) cols.push('<div><h3>Меблі</h3>' + list(c.furniture) + '</div>');
     if (has(c.lighting)) cols.push('<div><h3>Світло</h3>' + list(c.lighting) + '</div>');
     var fTitle = has(c.furniture) && !has(c.lighting) ? 'Меблі' : !has(c.furniture) && has(c.lighting) ? 'Світло' : 'Меблі й світло';
-    html.push(section(4, 'furniture', fTitle, cols.length ? '<div class="two-col">' + cols.join('') + '</div>' : empty()));
+    html.push(section(++num, 'furniture', fTitle, cols.length ? '<div class="two-col">' + cols.join('') + '</div>' : empty()));
 
     // 5. Референси та рендери
-    html.push(section(5, 'refs', 'Референси та рендери', galleryHTML(d.photos[slug] || []) + rendersHTML(d.renders[slug] || [])));
+    html.push(section(++num, 'refs', 'Референси та рендери', galleryHTML(d.photos[slug] || []) + rendersHTML(d.renders[slug] || [])));
 
     var idx = d.rooms.indexOf(room), n = d.rooms.length;
     var prev = d.rooms[(idx - 1 + n) % n], nextRoom = d.rooms[(idx + 1) % n];
