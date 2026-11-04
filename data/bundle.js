@@ -1,6 +1,6 @@
 // Згенеровано build.mjs — не редагуйте вручну. Джерело: data/*.json і rooms/*/
 window.GUIDE_DATA = {
- "generatedAt": "2026-11-04T15:57:50.196Z",
+ "generatedAt": "2026-11-04T16:07:10.162Z",
  "site": {
   "title": "Візуальний гід по дизайну квартири",
   "project": {
