@@ -85,8 +85,13 @@
       : empty()));
 
     // 4. Меблі й світло
-    html.push(section(4, 'furniture', 'Меблі й світло',
-      '<div class="two-col"><div><h3>Меблі</h3>' + list(c.furniture) + '</div><div><h3>Світло</h3>' + list(c.lighting) + '</div></div>'));
+    // Порожню колонку (меблі чи світло) не показуємо
+    var has = function (v) { return Array.isArray(v) ? v.length : v && Object.keys(v).length; };
+    var cols = [];
+    if (has(c.furniture)) cols.push('<div><h3>Меблі</h3>' + list(c.furniture) + '</div>');
+    if (has(c.lighting)) cols.push('<div><h3>Світло</h3>' + list(c.lighting) + '</div>');
+    var fTitle = has(c.furniture) && !has(c.lighting) ? 'Меблі' : !has(c.furniture) && has(c.lighting) ? 'Світло' : 'Меблі й світло';
+    html.push(section(4, 'furniture', fTitle, cols.length ? '<div class="two-col">' + cols.join('') + '</div>' : empty()));
 
     // 5. Референси та рендери
     html.push(section(5, 'refs', 'Референси та рендери', galleryHTML(d.photos[slug] || []) + rendersHTML(d.renders[slug] || [])));
