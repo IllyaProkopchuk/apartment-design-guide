@@ -1,6 +1,6 @@
 // Згенеровано build.mjs — не редагуйте вручну. Джерело: data/*.json і rooms/*/
 window.GUIDE_DATA = {
- "generatedAt": "2026-11-04T16:35:18.587Z",
+ "generatedAt": "2026-11-04T16:37:37.512Z",
  "site": {
   "title": "Візуальний гід по дизайну квартири",
   "project": {
@@ -1641,8 +1641,7 @@ window.GUIDE_DATA = {
      "like": "все"
     },
     "все подобається.jpg": {
-     "like": "все",
-     "favorite": true
+     "like": "все"
     },
     "гарне рішення для лотка для кота, і дизайн гарний.jpg": {
      "like": "гарне рішення для лотка для кота, гарний дизайн"
@@ -3671,8 +3670,7 @@ window.GUIDE_DATA = {
     "likes": [
      "все"
     ],
-    "dislikes": [],
-    "favorite": true
+    "dislikes": []
    },
    {
     "file": "все подобається також.jpg",
