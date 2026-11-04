@@ -614,3 +614,14 @@ main.wrap { padding-top: 32px; padding-bottom: 80px; }
   .pager-next { text-align: left; }
   .lightbox-nav { top: auto; bottom: 18px; transform: none; }
 }
+
+/* лайтбокс: поки вантажиться наступне фото — ховаємо старе з підписом і показуємо крутилку */
+.lightbox figure { transition: opacity .15s ease; }
+.lightbox.is-loading figure, .lightbox.is-loading .lightbox-counter { opacity: 0; }
+.lightbox.is-loading::after {
+  content: ""; position: fixed; left: 50%; top: 50%; width: 42px; height: 42px; margin: -21px 0 0 -21px;
+  border: 3px solid rgba(255, 255, 255, .25); border-top-color: #fff; border-radius: 50%;
+  animation: lb-spin .8s linear infinite;
+}
+@keyframes lb-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .lightbox.is-loading::after { animation: none; } }

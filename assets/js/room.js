@@ -185,14 +185,28 @@
     counter.className = 'lightbox-counter';
     dlg.appendChild(prevBtn); dlg.appendChild(nextBtn); dlg.appendChild(counter);
 
-    var items = [], cur = 0;
+    var items = [], cur = 0, token = 0;
+    // Нове фото, підпис і лічильник показуємо разом, лише коли фото вже завантажилось.
     function show(i) {
       if (!items.length) return;
       cur = (i + items.length) % items.length;
-      var b = items[cur];
-      img.src = b.getAttribute('data-src');
-      img.alt = cap.textContent = b.getAttribute('data-caption');
-      counter.textContent = (cur + 1) + ' / ' + items.length;
+      var b = items[cur], src = b.getAttribute('data-src'), my = ++token;
+      dlg.classList.add('is-loading');
+      var pre = new Image();
+      pre.onload = pre.onerror = function () {
+        if (my !== token) return;            // користувач уже перегорнув далі
+        img.src = src;
+        img.alt = cap.textContent = b.getAttribute('data-caption');
+        counter.textContent = (cur + 1) + ' / ' + items.length;
+        dlg.classList.remove('is-loading');
+        preload(cur + 1); preload(cur - 1);
+      };
+      pre.src = src;
+    }
+    function preload(i) {
+      if (!items.length) return;
+      var b = items[(i + items.length) % items.length];
+      new Image().src = b.getAttribute('data-src');
     }
     app.addEventListener('click', function (e) {
       var b = e.target.closest('.ref-open');
