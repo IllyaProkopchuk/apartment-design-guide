@@ -107,7 +107,7 @@ async function scanImages(slug, sub) {
   return out.sort((a, b) => a.caption.localeCompare(b.caption, 'uk'));
 }
 
-// Ручні правки з room.json → "photoOverrides": { "файл.jpg": { "like": "що подобається", "dislike": "що ні", "caption": "новий підпис", "tone": "like|dislike|neutral", "note": "..." } }
+// Ручні правки з room.json → "photoOverrides": { "файл.jpg": { "like": "що подобається", "dislike": "що ні", "with": "інше-фото.jpg", "caption": "новий підпис", "tone": "like|dislike|neutral", "note": "..." } }
 // Для підписів на кшталт «те саме», з яких тон не зрозумілий.
 function applyOverrides(list, overrides, slug) {
   if (!overrides) return list;
@@ -131,7 +131,17 @@ function applyOverrides(list, overrides, slug) {
     }
     if (o.note) p.note = o.note;
   }
-  return list;
+  // "with": "інше-фото.jpg" — показати це фото в одній картці з іншим (той самий проєкт, інший ракурс).
+  const merged = new Set();
+  for (const [name, o] of Object.entries(overrides)) {
+    if (!o.with) continue;
+    const p = byName.get(name.normalize('NFC'));
+    const target = byName.get(String(o.with).normalize('NFC'));
+    if (!p || !target) { warn(`rooms/${slug}/room.json: photoOverrides «${name}» → with: файл «${o.with}» не знайдено`); continue; }
+    (target.more = target.more || []).push({ file: p.file, src: p.src });
+    merged.add(p);
+  }
+  return list.filter((p) => !merged.has(p));
 }
 
 async function main() {

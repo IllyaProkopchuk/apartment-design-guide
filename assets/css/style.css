@@ -352,3 +352,7 @@ main { padding: 32px 0 64px; }
 .cap-like { background: var(--like-bg); color: #2c4d25; }
 .cap-dislike { background: var(--dislike-bg); color: #7d2a1f; }
 @media print { .cap-line { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+
+/* кілька ракурсів одного проєкту в одній картці */
+.ref-more { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 4px; padding: 4px; background: var(--surface-2); }
+.ref-more .ref-open img { aspect-ratio: 1 / 1; }

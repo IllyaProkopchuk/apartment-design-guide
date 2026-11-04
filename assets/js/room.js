@@ -114,6 +114,10 @@
   function figure(p, cls) {
     return '<li><figure class="ref ' + cls + '"><button type="button" class="ref-open" data-src="' + esc(ROOT + p.src) + '" data-caption="' + esc(plainCaption(p)) + '">' +
       '<img loading="lazy" src="' + esc(ROOT + p.src) + '" alt="' + esc(plainCaption(p)) + '"></button>' +
+      (p.more && p.more.length ? '<div class="ref-more">' + p.more.map(function (m) {
+        return '<button type="button" class="ref-open" data-src="' + esc(ROOT + m.src) + '" data-caption="' + esc(plainCaption(p)) + '">' +
+          '<img loading="lazy" src="' + esc(ROOT + m.src) + '" alt="' + esc(plainCaption(p)) + ' (інший ракурс)"></button>';
+      }).join('') + '</div>' : '') +
       '<figcaption>' + captionHTML(p) + (p.note ? '<span class="ref-note">' + esc(p.note) + '</span>' : '') + '</figcaption></figure></li>';
   }
 
