@@ -1,6 +1,6 @@
 // Згенеровано build.mjs — не редагуйте вручну. Джерело: data/*.json і rooms/*/
 window.GUIDE_DATA = {
- "generatedAt": "2026-11-04T13:58:13.467Z",
+ "generatedAt": "2026-11-04T14:00:03.269Z",
  "site": {
   "title": "Візуальний гід по дизайну квартири",
   "project": {
@@ -85,12 +85,12 @@ window.GUIDE_DATA = {
       648
      ],
      [
-      1280,
-      768
+      1025,
+      648
      ],
      [
-      1203,
-      903
+      1025,
+      744
      ],
      [
       950,
@@ -109,6 +109,42 @@ window.GUIDE_DATA = {
    "label": [
     1145,
     470
+   ]
+  },
+  {
+   "id": "khrystia-workplace",
+   "slug": "robche-mistse-khrysti",
+   "name": "Робоче місце Христі",
+   "area": null,
+   "dimensions": "уточнити",
+   "status": "ідея",
+   "plan": [
+    [
+     [
+      1025,
+      648
+     ],
+     [
+      1330,
+      648
+     ],
+     [
+      1280,
+      768
+     ],
+     [
+      1203,
+      903
+     ],
+     [
+      1025,
+      744
+     ]
+    ]
+   ],
+   "label": [
+    1175,
+    728
    ]
   },
   {
@@ -672,6 +708,25 @@ window.GUIDE_DATA = {
     "date": ""
    }
   },
+  "robche-mistse-khrysti": {
+   "style": {
+    "directions": [],
+    "mood": ""
+   },
+   "palette": [],
+   "materials": {
+    "floor": "",
+    "walls": "",
+    "ceiling": ""
+   },
+   "furniture": [],
+   "lighting": [],
+   "questions": [],
+   "decision": {
+    "summary": "",
+    "date": ""
+   }
+  },
   "dytiacha-kabinet": {
    "style": {
     "directions": [
@@ -1127,6 +1182,7 @@ window.GUIDE_DATA = {
  "photos": {
   "vitalnia-kukhnia": [],
   "spalnia": [],
+  "robche-mistse-khrysti": [],
   "dytiacha-kabinet": [
    {
     "file": "гарне рейкове освітлення, просто гарна картинка 2, але мінус світлий диван.jpg",
@@ -2040,6 +2096,7 @@ window.GUIDE_DATA = {
  "renders": {
   "vitalnia-kukhnia": [],
   "spalnia": [],
+  "robche-mistse-khrysti": [],
   "dytiacha-kabinet": [],
   "peredpokii": [],
   "vanna-tualet": [],

@@ -1,0 +1,19 @@
+{
+  "style": {
+    "directions": [],
+    "mood": ""
+  },
+  "palette": [],
+  "materials": {
+    "floor": "",
+    "walls": "",
+    "ceiling": ""
+  },
+  "furniture": [],
+  "lighting": [],
+  "questions": [],
+  "decision": {
+    "summary": "",
+    "date": ""
+  }
+}
