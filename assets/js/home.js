@@ -42,8 +42,6 @@
     $('styles').innerHTML = (st.items || []).map(function (s) {
       return '<li><b lang="en">' + esc(s.name) + '</b><i>' + esc(s.uk || '') + '</i><span>' + esc(s.text || '') + '</span></li>';
     }).join('');
-
-    if (d.generatedAt) $('generated').textContent = 'Збірка: ' + new Date(d.generatedAt).toLocaleDateString('uk-UA') + '.';
   }
 
 })();
