@@ -101,7 +101,7 @@ async function scanImages(slug, sub) {
   return out.sort((a, b) => a.caption.localeCompare(b.caption, 'uk'));
 }
 
-// Ручні оцінки з room.json → "photoOverrides": { "файл.jpg": { "tone": "like|dislike|neutral", "note": "..." } }
+// Ручні правки з room.json → "photoOverrides": { "файл.jpg": { "caption": "новий підпис", "tone": "like|dislike|neutral", "note": "..." } }
 // Для підписів на кшталт «те саме», з яких тон не зрозумілий.
 function applyOverrides(list, overrides, slug) {
   if (!overrides) return list;
@@ -109,6 +109,10 @@ function applyOverrides(list, overrides, slug) {
   for (const [name, o] of Object.entries(overrides)) {
     const p = byName.get(name.normalize('NFC'));
     if (!p) { warn(`rooms/${slug}/room.json: photoOverrides → файл «${name}» не знайдено в photos/`); continue; }
+    if (o.caption) {
+      const parsed = parseCaption(o.caption + path.extname(p.file));
+      p.caption = parsed.caption; p.segments = parsed.segments; p.group = parsed.group;
+    }
     if (o.tone) {
       if (!['like', 'dislike', 'neutral'].includes(o.tone)) { warn(`photoOverrides «${name}»: tone має бути like, dislike або neutral`); continue; }
       p.segments = p.segments.map((s) => (s.tone === 'neutral' ? { ...s, tone: o.tone } : s));

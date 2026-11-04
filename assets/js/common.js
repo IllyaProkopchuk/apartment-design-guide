@@ -47,39 +47,40 @@
   /* ---------- схема плану ---------- */
   function planSVG(rooms, opts) {
     opts = opts || {};
+    // Справжнє креслення (site.planImage) + клікабельні зони кімнат (rooms[].plan — масив полігонів
+    // у пікселях креслення). opts.compact — міні-план без підписів, з підсвіченою поточною кімнатою.
     var root = opts.root || '';
     var current = opts.current || null;
-    var W = 1000, H = 620;
-    var out = ['<svg class="plan-svg" viewBox="0 0 ' + W + ' ' + H + '" role="group" aria-label="Схема квартири: оберіть кімнату">'];
-    out.push('<rect class="plan-outline" x="6" y="6" width="' + (W - 12) + '" height="' + (H - 12) + '" rx="6"/>');
+    var img = opts.image;
+    if (!img) return '<p class="empty">Креслення не налаштоване (site.json → planImage).</p>';
+    var W = img.width, H = img.height;
+    var out = ['<svg class="plan-svg' + (opts.compact ? ' is-compact' : '') + '" viewBox="0 0 ' + W + ' ' + H + '" role="group" aria-label="План квартири: оберіть кімнату">'];
+    out.push('<image href="' + esc(root + img.src) + '" x="0" y="0" width="' + W + '" height="' + H + '" preserveAspectRatio="xMidYMid meet"/>');
 
+    var labels = [];
     rooms.forEach(function (r) {
-      if (!r.plan) return;
+      if (!r.plan || !r.plan.length) return;
       var s = status(r.status);
-      var p = r.plan;
-      var small = p.h < 110 || p.w < 160;
-      var nameLines = r.planLabel && r.planLabel.length ? r.planLabel : [r.name];
-      var fsName = opts.compact ? (p.w < 130 ? 17 : small ? 26 : 40) : (small ? 18 : 26);
-      var fsMeta = opts.compact ? (small ? 0 : 26) : (small ? 15 : 18);
-      var lines = nameLines.map(function (t) { return { cls: 't-name', text: t, fs: fsName }; });
-      if (fsMeta) {
-        lines.push({ cls: 't-status', text: s.mark + ' ' + s.label, fs: fsMeta });
-        if (!small && !opts.compact) lines.push({ cls: 't-area', text: areaText(r), fs: fsMeta - 2 });
-      }
-      var total = lines.reduce(function (sum, l) { return sum + l.fs * 1.3; }, 0);
-      var cx = p.x + p.w / 2;
-      var y = p.y + p.h / 2 - total / 2;
-
       var cls = 'plan-room status-' + s.cls + (current === r.slug ? ' is-current' : '') + (current && current !== r.slug ? ' is-dim' : '');
       out.push('<a class="' + cls + '" href="' + esc(roomHref(root, r)) + '" aria-label="' + esc(r.name + ' — статус: ' + s.label) + '"' +
         (current === r.slug ? ' aria-current="page"' : '') + '>');
-      out.push('<title>' + esc(r.name + ' · ' + s.label + ' · ' + areaText(r)) + '</title>');
-      out.push('<rect x="' + p.x + '" y="' + p.y + '" width="' + p.w + '" height="' + p.h + '" rx="6"/>');
-      lines.forEach(function (l) {
-        y += l.fs * 1.3;
-        out.push('<text class="' + l.cls + '" x="' + cx + '" y="' + (y - l.fs * 0.3) + '" text-anchor="middle" font-size="' + l.fs + '">' + esc(l.text) + '</text>');
+      out.push('<title>' + esc(r.name + ' · ' + s.label) + '</title>');
+      r.plan.forEach(function (poly) {
+        out.push('<polygon points="' + poly.map(function (p) { return p.join(','); }).join(' ') + '"/>');
       });
       out.push('</a>');
+      if (!opts.compact && r.label) labels.push({ r: r, s: s });
+    });
+
+    // Підписи окремим шаром поверх зон, щоб не перекривалися сусідніми полігонами.
+    labels.forEach(function (l) {
+      var x = l.r.label[0], y = l.r.label[1];
+      var name = l.r.name, st = l.s.mark + ' ' + l.s.label;
+      var fs = 19, w = Math.max(name.length, st.length) * fs * 0.56 + 24, h = fs * 2.7;
+      out.push('<a class="plan-label status-' + l.s.cls + '" href="' + esc(roomHref(root, l.r)) + '" tabindex="-1" aria-hidden="true">' +
+        '<rect x="' + (x - w / 2) + '" y="' + (y - h / 2) + '" width="' + w + '" height="' + h + '" rx="10"/>' +
+        '<text class="t-name" x="' + x + '" y="' + (y - 2) + '" text-anchor="middle" font-size="' + fs + '">' + esc(name) + '</text>' +
+        '<text class="t-status" x="' + x + '" y="' + (y + fs) + '" text-anchor="middle" font-size="' + (fs - 3) + '">' + esc(st) + '</text></a>');
     });
     out.push('</svg>');
     return out.join('');
@@ -135,38 +136,9 @@
       'Має зʼявитися файл <code>' + esc(root) + 'data/bundle.js</code>.</div>';
   }
 
-  /* ---------- GitHub Issues ---------- */
-  function githubRepo(site) {
-    if (site && /^[\w.-]+\/[\w.-]+$/.test(site.githubRepo || '')) return site.githubRepo;
-    var host = location.hostname;
-    if (/\.github\.io$/i.test(host)) {
-      var owner = host.split('.')[0];
-      var seg = location.pathname.split('/').filter(Boolean)[0];
-      if (seg && seg !== 'rooms' && !/\.html?$/i.test(seg)) return owner + '/' + seg;
-      return owner + '/' + owner + '.github.io';
-    }
-    return null;
-  }
-
-  function issueURL(site, roomName, question) {
-    var repo = githubRepo(site);
-    if (!repo) return null;
-    var title = '[' + roomName + '] ' + (question ? 'Питання: ' + question : 'Коментар');
-    if (title.length > 200) title = title.slice(0, 197) + '…';
-    var body = [
-      '**Кімната:** ' + roomName,
-      /^https?:$/.test(location.protocol) ? '**Сторінка:** ' + location.href.split('#')[0] : '',
-      question ? '**Питання:** ' + question : '',
-      '',
-      '### Коментар',
-      ''
-    ].filter(function (l, i, a) { return l !== '' || i >= a.length - 3; }).join('\n');
-    return 'https://github.com/' + repo + '/issues/new?title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(body);
-  }
-
   window.Guide = {
     STATUS: STATUS, STATUS_ORDER: STATUS_ORDER, status: status, statusBadge: statusBadge,
     legendHTML: legendHTML, esc: esc, areaText: areaText, roomHref: roomHref, planSVG: planSVG,
-    loadGuide: loadGuide, loadError: loadError, issueURL: issueURL, githubRepo: githubRepo
+    loadGuide: loadGuide, loadError: loadError
   };
 })();

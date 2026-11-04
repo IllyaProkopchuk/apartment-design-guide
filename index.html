@@ -30,27 +30,12 @@
     <section class="section" aria-labelledby="plan-title">
       <div class="section-head">
         <h2 id="plan-title">План квартири</h2>
-        <div class="plan-tabs no-print" role="tablist" aria-label="Вигляд плану">
-          <button type="button" role="tab" id="tab-schema" aria-controls="panel-schema" aria-selected="true">Схема</button>
-          <button type="button" role="tab" id="tab-drawing" aria-controls="panel-drawing" aria-selected="false">Креслення</button>
-        </div>
       </div>
       <div class="plan-frame">
-        <div id="panel-schema" role="tabpanel" aria-labelledby="tab-schema">
-          <div id="plan"><p class="empty">Завантаження схеми…</p></div>
-        </div>
-        <div id="panel-drawing" role="tabpanel" aria-labelledby="tab-drawing" hidden>
-          <div class="plan-drawing">
-            <img id="plan-img" alt="Креслення квартири від INSHA Design Studio, варіант 3" hidden>
-            <div class="plan-drawing-empty" id="plan-empty">
-              <p><strong>Креслення ще не додано.</strong></p>
-              <p class="small">Покладіть файл <code>plan/plan.svg</code> або <code>plan/plan.png</code> — він зʼявиться тут автоматично.</p>
-            </div>
-          </div>
-        </div>
+        <div id="plan"><p class="empty">Завантаження плану…</p></div>
       </div>
+      <p class="plan-caption" id="plan-caption">Кольором позначено кімнати та їхній статус. Натисніть на кімнату, щоб відкрити її сторінку.</p>
       <p class="plan-caption" id="plan-pdf"></p>
-      <p class="plan-caption">Схема умовна й не в масштабі: розташування кімнат приблизне, вона лише для навігації. Натисніть на кімнату, щоб відкрити її сторінку.</p>
       <div id="legend"></div>
     </section>
 

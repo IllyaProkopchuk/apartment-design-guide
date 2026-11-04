@@ -320,3 +320,21 @@ main { padding: 32px 0 64px; }
 .brief h3 { font-size: 1rem; margin-bottom: 8px; }
 @media print { .seg, .brief > div { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
 .ref-note { font-size: .82rem; color: var(--muted); font-style: italic; }
+
+/* ---------- план: справжнє креслення + зони кімнат ---------- */
+.plan-svg image { pointer-events: none; }
+.plan-svg .plan-room polygon { stroke-width: 4; fill-opacity: .28; transition: fill-opacity .15s ease; stroke-linejoin: round; }
+.plan-svg .plan-room.status-idea polygon { fill: var(--st-idea-line); stroke: var(--st-idea-line); stroke-dasharray: 14 8; }
+.plan-svg .plan-room.status-choosing polygon { fill: var(--st-choosing-line); stroke: var(--st-choosing-line); stroke-dasharray: 3 7; stroke-linecap: round; }
+.plan-svg .plan-room.status-approved polygon { fill: var(--st-approved-line); stroke: var(--st-approved-line); }
+.plan-svg .plan-room.status-unknown polygon { fill: var(--dislike); stroke: var(--dislike); }
+.plan-svg .plan-room:hover polygon, .plan-svg .plan-room:focus-visible polygon { fill-opacity: .48; }
+.plan-svg .plan-room:focus-visible polygon { stroke: var(--brass); stroke-width: 8; stroke-dasharray: none; }
+.plan-svg .plan-label rect { fill-opacity: .94; stroke-width: 2; }
+.plan-svg .plan-label .t-name { font-family: var(--font-serif); font-weight: 600; fill: var(--ink); }
+.plan-svg .plan-label .t-status { font-family: var(--font-sans); font-weight: 600; }
+/* міні-план на сторінці кімнати: видно лише поточну кімнату */
+.plan-svg.is-compact .plan-room polygon { fill: transparent; stroke: transparent; }
+.plan-svg.is-compact .plan-room:hover polygon { fill: var(--brass); fill-opacity: .2; }
+.plan-svg.is-compact .plan-room.is-current polygon { fill: var(--brass); fill-opacity: .4; stroke: var(--wood); stroke-width: 8; stroke-dasharray: none; }
+.plan-svg .plan-room.is-dim { opacity: 1; }

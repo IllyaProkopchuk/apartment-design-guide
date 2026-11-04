@@ -4,8 +4,6 @@
   var G = window.Guide, esc = G.esc;
   var $ = function (id) { return document.getElementById(id); };
 
-  setupTabs();
-  setupDrawing();
 
   G.loadGuide('').then(render, function () { G.loadError($('plan'), ''); });
 
@@ -15,7 +13,8 @@
       .filter(function (k) { return p[k]; })
       .map(function (k) { return '<li>' + esc(p[k]) + '</li>'; }).join('');
 
-    $('plan').innerHTML = G.planSVG(d.rooms, { root: '' });
+    $('plan').innerHTML = G.planSVG(d.rooms, { root: '', image: d.site.planImage });
+    if (d.site.planImage && d.site.planImage.caption) $('plan-caption').textContent = d.site.planImage.caption + '. Кольором позначено кімнати та їхній статус. Натисніть на кімнату, щоб відкрити її сторінку.';
     $('legend').innerHTML = G.legendHTML();
     if (d.site.planPdf) $('plan-pdf').innerHTML = 'Планувальне рішення від дизайнера: <a href="' + esc(encodeURI(d.site.planPdf)) + '" target="_blank" rel="noopener">відкрити PDF</a>.';
 
@@ -54,31 +53,4 @@
     if (d.generatedAt) $('generated').textContent = 'Збірка: ' + new Date(d.generatedAt).toLocaleDateString('uk-UA') + '.';
   }
 
-  function setupTabs() {
-    var tabs = [$('tab-schema'), $('tab-drawing')];
-    tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () { select(i); });
-      tab.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { var n = (i + 1) % 2; select(n); tabs[n].focus(); }
-      });
-    });
-    function select(i) {
-      tabs.forEach(function (t, j) {
-        t.setAttribute('aria-selected', String(i === j));
-        t.tabIndex = i === j ? 0 : -1;
-        $(t.getAttribute('aria-controls')).hidden = i !== j;
-      });
-    }
-    select(0);
-  }
-
-  function setupDrawing() {
-    // Шукаємо креслення: спершу SVG, потім PNG, потім JPG. Працює і з диска, і на GitHub Pages.
-    var img = $('plan-img'), empty = $('plan-empty');
-    var candidates = ['plan/plan.svg', 'plan/plan.png', 'plan/plan.jpg'];
-    var i = 0;
-    img.onload = function () { img.hidden = false; empty.hidden = true; };
-    img.onerror = function () { i += 1; if (i < candidates.length) img.src = candidates[i]; };
-    img.src = candidates[0];
-  }
 })();

@@ -1,6 +1,5 @@
 {
   "title": "Візуальний гід по дизайну квартири",
-  "githubRepo": "IllyaProkopchuk/apartment-design-guide",
   "project": {
     "area": "~90 м²",
     "floor": "14-й поверх",
@@ -8,5 +7,11 @@
     "planning": "планування INSHA Design Studio, варіант 3",
     "scale": "креслення в масштабі 1:50"
   },
-  "planPdf": "5_Планувальне_рішення_Варіант_3_.pdf"
+  "planPdf": "5_Планувальне_рішення_Варіант_3_.pdf",
+  "planImage": {
+    "src": "plan/plan.png",
+    "width": 1580,
+    "height": 1190,
+    "caption": "Планувальне рішення, варіант 3, М 1:50 (INSHA Design Studio)"
+  }
 }

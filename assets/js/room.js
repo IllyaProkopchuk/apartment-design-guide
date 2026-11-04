@@ -27,7 +27,6 @@
       return;
     }
     var c = d.content[slug] || {};
-    var st = G.status(room.status);
     document.title = room.name + ' · Візуальний гід квартири';
 
     var style = c.style || {};
@@ -71,35 +70,11 @@
     // 5. Референси та рендери
     html.push(section(5, 'refs', 'Референси та рендери', galleryHTML(d.photos[slug] || []) + rendersHTML(d.renders[slug] || [])));
 
-    // 6. Відкриті питання
-    var qs = (c.questions || []).filter(Boolean);
-    var mainIssue = G.issueURL(d.site, room.name);
-    html.push(section(6, 'questions', 'Відкриті питання до дизайнерки',
-      (qs.length ? '<ol class="questions">' + qs.map(function (q) {
-        var u = G.issueURL(d.site, room.name, q);
-        return '<li><span class="q-text">' + esc(q) + '</span>' + (u ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">відповісти</a>' : '') + '</li>';
-      }).join('') + '</ol>' : empty('Питань поки немає.')) +
-      '<div class="comment-row">' + (mainIssue
-        ? '<a class="btn" href="' + esc(mainIssue) + '" target="_blank" rel="noopener">Прокоментувати</a><span class="muted small">Відкриється GitHub Issues; потрібен акаунт GitHub.</span>'
-        : '<span class="btn" aria-disabled="true">Прокоментувати</span><span class="muted small">Посилання зʼявиться, коли в data/site.json буде вказано githubRepo.</span>') +
-      '</div>'));
-
-    // 7. Статус рішення
-    var dec = c.decision || {};
-    html.push(section(7, 'decision', 'Статус рішення',
-      '<ol class="stepper">' + G.STATUS_ORDER.map(function (k) {
-        var s = G.STATUS[k];
-        var cls = s.step < st.step ? ' is-done' : s.step === st.step ? ' is-now status-' + s.cls : '';
-        return '<li class="' + cls.trim() + '"' + (s.step === st.step ? ' aria-current="step"' : '') + '><b>' + s.mark + ' ' + esc(s.label) + '</b>' + esc(s.hint) + '</li>';
-      }).join('') + '</ol>' +
-      (dec.summary ? '<p>' + esc(dec.summary) + '</p>' : '') +
-      (dec.date ? '<p class="muted small">Дата рішення: ' + esc(dec.date) + '</p>' : '')));
-
     html.push('</div>');
 
     // Бічна панель: міні-план і перелік кімнат
     html.push('<aside class="room-aside" aria-label="Інші кімнати"><div class="card sticky"><h2>Де це на плані</h2>' +
-      G.planSVG(d.rooms, { root: ROOT, current: slug, compact: true }) +
+      G.planSVG(d.rooms, { root: ROOT, current: slug, compact: true, image: d.site.planImage }) +
       '<ul class="room-nav">' + d.rooms.map(function (r) {
         return '<li><a href="' + esc(G.roomHref(ROOT, r)) + '"' + (r.slug === slug ? ' aria-current="page"' : '') + '><span>' + esc(r.name) + '</span>' + G.statusBadge(r.status) + '</a></li>';
       }).join('') + '</ul></div></aside>');
