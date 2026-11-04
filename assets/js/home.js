@@ -8,10 +8,6 @@
   G.loadGuide('').then(render, function () { G.loadError($('plan'), ''); });
 
   function render(d) {
-    var p = d.site.project || {};
-    $('facts').innerHTML = ['area', 'floor', 'renovation', 'planning', 'scale']
-      .filter(function (k) { return p[k]; })
-      .map(function (k) { return '<li>' + esc(p[k]) + '</li>'; }).join('');
 
     $('plan').innerHTML = G.planSVG(d.rooms, { root: '', image: d.site.planImage });
     if (d.site.planImage && d.site.planImage.caption) $('plan-caption').textContent = d.site.planImage.caption + '. Натисніть на кімнату, щоб відкрити її сторінку.';
