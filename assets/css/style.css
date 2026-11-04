@@ -501,3 +501,5 @@ h2 { color: var(--walnut); }
   .site-header, .site-footer { background: #fff !important; color: var(--ink) !important; }
   .site-header .brand { color: var(--ink); }
 }
+
+.footer-end { text-align: center; font-family: var(--font-serif); font-size: 1.15rem; }
