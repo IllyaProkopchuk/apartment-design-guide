@@ -1,6 +1,6 @@
 // Згенеровано build.mjs — не редагуйте вручну. Джерело: data/*.json і rooms/*/
 window.GUIDE_DATA = {
- "generatedAt": "2026-11-04T16:43:05.974Z",
+ "generatedAt": "2026-11-04T16:44:51.249Z",
  "site": {
   "title": "Візуальний гід по дизайну квартири",
   "project": {
@@ -1658,9 +1658,6 @@ window.GUIDE_DATA = {
     },
     "гарно, просто але гарно.jpg": {
      "like": "просто, але гарно"
-    },
-    "гарно, просто гарно.jpg": {
-     "like": "просто гарно"
     },
     "загалом, все подобається, окрім кольору плитки.jpg": {
      "like": "загалом все",
@@ -3828,28 +3825,6 @@ window.GUIDE_DATA = {
     "group": "like",
     "likes": [
      "просто, але гарно"
-    ],
-    "dislikes": []
-   },
-   {
-    "file": "гарно, просто гарно.jpg",
-    "path": "гарно, просто гарно.jpg",
-    "zone": null,
-    "src": "rooms/vanna-tualet/photos/%D0%B3%D0%B0%D1%80%D0%BD%D0%BE%2C%20%D0%BF%D1%80%D0%BE%D1%81%D1%82%D0%BE%20%D0%B3%D0%B0%D1%80%D0%BD%D0%BE.jpg",
-    "caption": "гарно, просто гарно",
-    "segments": [
-     {
-      "text": "гарно,",
-      "tone": "like"
-     },
-     {
-      "text": "просто гарно",
-      "tone": "like"
-     }
-    ],
-    "group": "like",
-    "likes": [
-     "просто гарно"
     ],
     "dislikes": []
    },
