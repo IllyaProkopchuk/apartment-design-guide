@@ -625,3 +625,12 @@ main.wrap { padding-top: 32px; padding-bottom: 80px; }
 }
 @keyframes lb-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .lightbox.is-loading::after { animation: none; } }
+
+/* ---------- фаворити ---------- */
+.ref { position: relative; }
+.fav-badge { position: absolute; top: 10px; left: 10px; z-index: 2; background: var(--brass); color: #fff; font-size: .78rem; font-weight: 700; letter-spacing: .02em; padding: 3px 10px; border-radius: 999px; box-shadow: 0 2px 8px rgba(43, 33, 28, .25); pointer-events: none; }
+.ref--fav { border-top-color: var(--brass) !important; box-shadow: 0 0 0 2px var(--brass); }
+.ref--fav::before { display: none; }
+.gallery-group--fav h3 { color: var(--walnut); }
+.fav-star { color: var(--brass); }
+@media (max-width: 560px) { .fav-badge { top: 6px; left: 6px; font-size: .7rem; padding: 2px 8px; } }

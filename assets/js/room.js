@@ -135,7 +135,7 @@
   }
 
   function figure(p, cls) {
-    return '<li><figure class="ref ' + cls + '"><button type="button" class="ref-open" data-src="' + esc(ROOT + p.src) + '" data-caption="' + esc(plainCaption(p)) + '">' +
+    return '<li><figure class="ref ' + cls + '">' + (p.favorite ? '<span class="fav-badge" title="Фаворит">★ фаворит</span>' : '') + '<button type="button" class="ref-open" data-src="' + esc(ROOT + p.src) + '" data-caption="' + esc(plainCaption(p)) + '">' +
       '<img loading="lazy" src="' + esc(ROOT + p.src) + '" alt="' + esc(plainCaption(p)) + '"></button>' +
       (p.more && p.more.length ? '<div class="ref-more">' + p.more.map(function (m) {
         return '<button type="button" class="ref-open" data-src="' + esc(ROOT + m.src) + '" data-caption="' + esc(plainCaption(p)) + '">' +
@@ -160,8 +160,11 @@
   }
 
   function groupsHTML(photos) {
-    return GROUPS.map(function (g) {
-      var items = photos.filter(function (p) { return p.group === g.key; });
+    var favs = photos.filter(function (p) { return p.favorite; });
+    var favHTML = favs.length ? '<div class="gallery-group gallery-group--fav"><h3><span class="fav-star" aria-hidden="true">★</span> Фаворити <span class="count">' + favs.length + '</span></h3>' +
+      '<ul class="gallery">' + favs.map(function (p) { return figure(p, 'ref--' + p.group + ' ref--fav'); }).join('') + '</ul></div>' : '';
+    return favHTML + GROUPS.map(function (g) {
+      var items = photos.filter(function (p) { return p.group === g.key && !p.favorite; });
       if (!items.length) return '';
       return '<div class="gallery-group"><h3>' + esc(g.title) + ' <span class="count">' + items.length + '</span></h3>' +
         '<ul class="gallery">' + items.map(function (p) { return figure(p, 'ref--' + g.key); }).join('') + '</ul></div>';

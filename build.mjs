@@ -114,7 +114,7 @@ async function scanImages(slug, sub) {
   return out.sort((a, b) => a.caption.localeCompare(b.caption, 'uk'));
 }
 
-// Ручні правки з room.json → "photoOverrides": { "файл.jpg": { "like": "що подобається", "dislike": "що ні", "with": "інше-фото.jpg", "caption": "новий підпис", "tone": "like|dislike|neutral", "note": "..." } }
+// Ручні правки з room.json → "photoOverrides": { "файл.jpg": { "like": "що подобається", "dislike": "що ні", "with": "інше-фото.jpg", "caption": "новий підпис", "favorite": true, "tone": "like|dislike|neutral", "note": "..." } }
 // Для підписів на кшталт «те саме», з яких тон не зрозумілий.
 function applyOverrides(list, overrides, slug) {
   if (!overrides) return list;
@@ -137,6 +137,7 @@ function applyOverrides(list, overrides, slug) {
       p.group = o.tone === 'neutral' ? 'neutral' : o.tone;
     }
     if (o.note) p.note = o.note;
+    if (o.favorite) p.favorite = true;
   }
   // "with": "інше-фото.jpg" — показати це фото в одній картці з іншим (той самий проєкт, інший ракурс).
   const merged = new Set();
