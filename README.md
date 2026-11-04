@@ -69,6 +69,11 @@ python3 -m http.server 8000
 
 `caption` замінює підпис, взятий з назви файлу (наприклад, `"caption": "гарний колір, гарна плитка і дерево"`). `tone`: `like`, `dislike` або `neutral`. `note` показується під підписом.
 
+### Зони на одній сторінці
+
+Якщо в кімнаті кілька зон (як «Вітальня-кухня»), кладіть фото в підпапки: `rooms/vitalnia-kukhnia/photos/kukhnia/`, `.../photos/vitalnia/`.
+Назви й порядок зон задаються в `room.json`: `"zones": [{"id": "kukhnia", "title": "Кухня"}, ...]`, а бриф по зонах — у `style.sections`.
+
 Рендери кладіть так само в `rooms/<slug>/renders/`: вони показуються окремим блоком «Рендери».
 
 Slug-и кімнат: `vitalnia-kukhnia`, `spalnia`, `dytiacha-kabinet`, `peredpokii`, `vanna-tualet` (ванна й туалет поки однією сторінкою), `pralnia-komora`.

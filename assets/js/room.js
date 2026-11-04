@@ -16,7 +16,16 @@
     if (room.dimensions && !/уточн/i.test(room.dimensions)) parts.push('<span>Габарити: ' + esc(room.dimensions) + '</span>');
     return parts.length ? '<div class="room-meta">' + parts.join('') + '</div>' : '';
   }
+  function briefHTML(likes, dislikes) {
+    if (!(likes || []).length && !(dislikes || []).length) return '';
+    return '<div class="two-col brief"><div class="brief-like"><h3>✓ Що подобається</h3>' + list(likes, '—') + '</div>' +
+      '<div class="brief-dislike"><h3>✕ Чого не хочемо</h3>' + list(dislikes, '—') + '</div></div>';
+  }
   function list(items, emptyText) {
+    if (items && !Array.isArray(items) && typeof items === 'object') {
+      var keys = Object.keys(items);
+      return keys.length ? keys.map(function (k) { return '<h4 class="zone-sub">' + esc(k) + '</h4>' + list(items[k], '—'); }).join('') : empty(emptyText);
+    }
     items = (items || []).filter(Boolean);
     return items.length ? '<ul class="list">' + items.map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') + '</ul>' : empty(emptyText);
   }
@@ -33,6 +42,7 @@
       return;
     }
     var c = d.content[slug] || {};
+    ZONES = c.zones || [];
     document.title = room.name + ' · Візуальний гід квартири';
 
     var style = c.style || {};
@@ -45,14 +55,14 @@
     html.push('<div class="room-layout"><div class="room-body">');
 
     // 1. Стиль і настрій
-    var hasStyle = (style.directions || []).length || style.mood || (style.likes || []).length || (style.dislikes || []).length;
+    var hasStyle = (style.directions || []).length || style.mood || (style.likes || []).length || (style.dislikes || []).length || (style.sections || []).length;
     html.push(section(1, 'style', 'Стиль і настрій', !hasStyle ? empty() :
       ((style.directions || []).length ? '<ul class="chips">' + style.directions.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>' : '') +
       (style.mood ? '<p>' + esc(style.mood) + '</p>' : '') +
-      ((style.likes || []).length || (style.dislikes || []).length
-        ? '<div class="two-col brief"><div class="brief-like"><h3>✓ Що подобається</h3>' + list(style.likes, '—') + '</div>' +
-          '<div class="brief-dislike"><h3>✕ Чого не хочемо</h3>' + list(style.dislikes, '—') + '</div></div>'
-        : '')));
+      briefHTML(style.likes, style.dislikes) +
+      (style.sections || []).map(function (z) {
+        return '<h3 class="zone-title">' + esc(z.title) + '</h3>' + (z.mood ? '<p>' + esc(z.mood) + '</p>' : '') + briefHTML(z.likes, z.dislikes);
+      }).join('')));
 
     // 2. Палітра
     var pal = c.palette || [];
@@ -122,8 +132,22 @@
       '<figcaption>' + captionHTML(p) + (p.note ? '<span class="ref-note">' + esc(p.note) + '</span>' : '') + '</figcaption></figure></li>';
   }
 
+  var ZONES = [];
   function galleryHTML(photos) {
     if (!photos.length) return empty('Референсів ще немає.');
+    var zoned = photos.some(function (p) { return p.zone; });
+    if (!zoned) return groupsHTML(photos);
+    var order = ZONES.map(function (z) { return z.id; });
+    photos.forEach(function (p) { if (order.indexOf(p.zone) < 0) order.push(p.zone); });
+    return order.map(function (id) {
+      var items = photos.filter(function (p) { return p.zone === id; });
+      if (!items.length) return '';
+      var z = ZONES.filter(function (x) { return x.id === id; })[0] || { title: id || 'Інше' };
+      return '<div class="zone-block"><h3 class="zone-title">' + esc(z.title) + ' <span class="count">' + items.length + '</span></h3>' + groupsHTML(items) + '</div>';
+    }).join('');
+  }
+
+  function groupsHTML(photos) {
     return GROUPS.map(function (g) {
       var items = photos.filter(function (p) { return p.group === g.key; });
       if (!items.length) return '';

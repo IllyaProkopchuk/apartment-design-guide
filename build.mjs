@@ -92,17 +92,24 @@ export function parseCaption(fileName) {
 async function scanImages(slug, sub) {
   const dir = path.join(ROOT, 'rooms', slug, sub);
   if (!(await exists(dir))) return [];
-  const files = (await readdir(dir, { withFileTypes: true }))
-    .filter((f) => f.isFile() && !f.name.startsWith('.'))
-    .map((f) => f.name);
+  // Файли прямо в папці + підпапки-зони (наприклад photos/kukhnia, photos/vitalnia).
+  const entries = (await readdir(dir, { withFileTypes: true })).filter((f) => !f.name.startsWith('.'));
+  const files = entries.filter((f) => f.isFile()).map((f) => ({ name: f.name, zone: null }));
+  for (const d of entries.filter((f) => f.isDirectory())) {
+    for (const f of await readdir(path.join(dir, d.name), { withFileTypes: true })) {
+      if (f.isFile() && !f.name.startsWith('.')) files.push({ name: f.name, zone: d.name });
+    }
+  }
   const out = [];
-  for (const name of files) {
+  for (const { name, zone } of files) {
+    const rel = zone ? `${zone}/${name}` : name;
     const ext = path.extname(name).toLowerCase();
     if (!IMAGE_EXT.has(ext)) {
-      warn(`rooms/${slug}/${sub}/${name}: не зображення, пропущено`);
+      warn(`rooms/${slug}/${sub}/${rel}: не зображення, пропущено`);
       continue;
     }
-    out.push({ file: name, src: `rooms/${slug}/${sub}/${encodeURIComponent(name)}`, ...parseCaption(name) });
+    const src = `rooms/${slug}/${sub}/` + (zone ? encodeURIComponent(zone) + '/' : '') + encodeURIComponent(name);
+    out.push({ file: name, path: rel, zone, src, ...parseCaption(name) });
   }
   return out.sort((a, b) => a.caption.localeCompare(b.caption, 'uk'));
 }
@@ -138,7 +145,7 @@ function applyOverrides(list, overrides, slug) {
     const p = byName.get(name.normalize('NFC'));
     const target = byName.get(String(o.with).normalize('NFC'));
     if (!p || !target) { warn(`rooms/${slug}/room.json: photoOverrides «${name}» → with: файл «${o.with}» не знайдено`); continue; }
-    (target.more = target.more || []).push({ file: p.file, src: p.src });
+    (target.more = target.more || []).push({ file: p.file, path: p.path, src: p.src });
     merged.add(p);
   }
   return list.filter((p) => !merged.has(p));

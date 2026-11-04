@@ -541,3 +541,10 @@ main.wrap { padding-top: 32px; padding-bottom: 80px; }
   .loader-dots b { animation: none; opacity: 1; }
 }
 @media print { .loader { display: none !important; } }
+
+/* зони на одній сторінці (кухня / вітальня) */
+.zone-block + .zone-block { margin-top: 40px; padding-top: 28px; border-top: 2px dashed var(--line); }
+.zone-title { font-size: 1.35rem; color: var(--burgundy); margin: 22px 0 12px; display: flex; align-items: center; gap: 10px; }
+.zone-block > .zone-title { margin-top: 0; }
+.zone-sub { font-family: var(--font-sans); font-size: .85rem; letter-spacing: .04em; text-transform: uppercase; color: var(--terracotta); margin: 14px 0 6px; }
+.zone-sub:first-child { margin-top: 0; }
