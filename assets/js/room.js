@@ -52,6 +52,12 @@
     html.push('<header class="room-head"><h1>' + esc(room.name) + '</h1>' +
       metaHTML(room) + '</header>');
 
+    // Головне коротко: 3–4 рядки, які можна прочитати за кілька секунд
+    if ((c.summary || []).length) {
+      html.push('<section class="room-summary" aria-label="Головне коротко"><h2>Головне коротко</h2><ul>' +
+        c.summary.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></section>');
+    }
+
     html.push('<div class="room-layout"><div class="room-body">');
 
     // 1. Стиль і настрій
@@ -84,6 +90,12 @@
 
     // 5. Референси та рендери
     html.push(section(5, 'refs', 'Референси та рендери', galleryHTML(d.photos[slug] || []) + rendersHTML(d.renders[slug] || [])));
+
+    var idx = d.rooms.indexOf(room), n = d.rooms.length;
+    var prev = d.rooms[(idx - 1 + n) % n], nextRoom = d.rooms[(idx + 1) % n];
+    html.push('<nav class="room-pager no-print" aria-label="Інші кімнати">' +
+      '<a class="pager-prev" href="' + esc(G.roomHref(ROOT, prev)) + '"><small>← Попередня</small><b>' + esc(prev.name) + '</b></a>' +
+      '<a class="pager-next" href="' + esc(G.roomHref(ROOT, nextRoom)) + '"><small>Наступна →</small><b>' + esc(nextRoom.name) + '</b></a></nav>');
 
     html.push('</div>');
 
@@ -166,12 +178,42 @@
     var dlg = document.getElementById('lightbox');
     if (!dlg || typeof dlg.showModal !== 'function') return;
     var img = dlg.querySelector('img'), cap = dlg.querySelector('figcaption');
+    var prevBtn = document.createElement('button'), nextBtn = document.createElement('button'), counter = document.createElement('div');
+    prevBtn.type = nextBtn.type = 'button';
+    prevBtn.className = 'lightbox-nav lightbox-prev'; prevBtn.setAttribute('aria-label', 'Попереднє фото'); prevBtn.textContent = '‹';
+    nextBtn.className = 'lightbox-nav lightbox-next'; nextBtn.setAttribute('aria-label', 'Наступне фото'); nextBtn.textContent = '›';
+    counter.className = 'lightbox-counter';
+    dlg.appendChild(prevBtn); dlg.appendChild(nextBtn); dlg.appendChild(counter);
+
+    var items = [], cur = 0;
+    function show(i) {
+      if (!items.length) return;
+      cur = (i + items.length) % items.length;
+      var b = items[cur];
+      img.src = b.getAttribute('data-src');
+      img.alt = cap.textContent = b.getAttribute('data-caption');
+      counter.textContent = (cur + 1) + ' / ' + items.length;
+    }
     app.addEventListener('click', function (e) {
       var b = e.target.closest('.ref-open');
       if (!b) return;
-      img.src = b.getAttribute('data-src');
-      img.alt = cap.textContent = b.getAttribute('data-caption');
+      items = Array.prototype.slice.call(app.querySelectorAll('.ref-open'));
+      show(items.indexOf(b));
       dlg.showModal();
+    });
+    prevBtn.addEventListener('click', function (e) { e.stopPropagation(); show(cur - 1); });
+    nextBtn.addEventListener('click', function (e) { e.stopPropagation(); show(cur + 1); });
+    dlg.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(cur - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(cur + 1); }
+    });
+    // свайп на телефоні
+    var x0 = null;
+    dlg.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    dlg.addEventListener('touchend', function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1));
     });
     dlg.querySelector('.lightbox-close').addEventListener('click', function () { dlg.close(); });
     dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });

@@ -569,3 +569,48 @@ main.wrap { padding-top: 32px; padding-bottom: 80px; }
 }
 @media (prefers-reduced-motion: reduce) { .lead-cat-big { transition: opacity .2s ease, visibility .2s; transform: translate(-50%, -50%); } }
 @media print { .lead-cat-big { display: none; } }
+
+/* ---------- головне коротко ---------- */
+.room-summary { margin: 18px 0 0; background: var(--surface); border: 1px solid var(--line); border-left: 6px solid var(--burgundy); border-radius: var(--radius); padding: 16px 20px; }
+.room-summary h2 { font-size: .85rem; font-family: var(--font-sans); text-transform: uppercase; letter-spacing: .06em; color: var(--terracotta); margin: 0 0 8px; }
+.room-summary ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: 1.05rem; }
+
+/* ---------- обкладинки карток кімнат ---------- */
+.room-card.has-cover { padding: 0; overflow: hidden; }
+.room-card.has-cover > :not(.room-cover) { margin-left: 18px; margin-right: 18px; }
+.room-card.has-cover h3 { margin-top: 14px; }
+.room-card.has-cover dl { margin-bottom: 16px; }
+.room-cover { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+
+/* ---------- попередня / наступна кімната ---------- */
+.room-pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+.room-pager a { display: grid; gap: 2px; text-decoration: none; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; color: var(--ink); }
+.room-pager a:hover { border-color: var(--terracotta); background: var(--terracotta-tint); }
+.room-pager small { color: var(--muted); font-size: .85rem; }
+.room-pager b { font-family: var(--font-serif); font-size: 1.1rem; color: var(--burgundy); }
+.pager-next { text-align: right; }
+
+/* ---------- лайтбокс: гортання ---------- */
+.lightbox-nav { position: fixed; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 999px; border: 0; background: rgba(255, 255, 255, .92); color: var(--ink); font-size: 2rem; line-height: 1; cursor: pointer; }
+.lightbox-nav:hover { background: #fff; }
+.lightbox-prev { left: max(12px, env(safe-area-inset-left, 0px)); }
+.lightbox-next { right: max(12px, env(safe-area-inset-right, 0px)); }
+.lightbox-counter { position: fixed; top: 18px; left: 50%; transform: translateX(-50%); color: #fff; font-size: .95rem; background: rgba(0, 0, 0, .35); padding: 4px 12px; border-radius: 999px; }
+
+/* ---------- телефон: компактна палітра й галерея рядками ---------- */
+@media (max-width: 560px) {
+  .swatches { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .swatch-chip { aspect-ratio: 1 / 1; border-radius: 999px 999px 8px 8px; }
+  .swatch b { font-size: .78rem; margin-top: 4px; line-height: 1.2; }
+  .swatch code { display: none; }
+  .swatch span { font-size: .72rem; }
+  .gallery { grid-template-columns: 1fr; gap: 10px; }
+  .ref { display: grid; grid-template-columns: 42% 1fr; }
+  .ref > .ref-open, .ref > .ref-more { grid-column: 1; }
+  .ref > figcaption { grid-column: 2; grid-row: 1 / span 2; align-content: start; }
+  .ref-open img { aspect-ratio: 3 / 4; height: 100%; }
+  .ref-more { grid-template-columns: repeat(2, 1fr); }
+  .room-pager { grid-template-columns: 1fr; }
+  .pager-next { text-align: left; }
+  .lightbox-nav { top: auto; bottom: 18px; transform: none; }
+}

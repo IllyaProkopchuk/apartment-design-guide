@@ -7,6 +7,19 @@
 
   G.loadGuide('').then(render, function () { G.loadError($('plan'), ''); });
 
+  // Обкладинка: файл з room.json → "cover", інакше перше фото з групи «Подобається».
+  function coverSrc(d, slug) {
+    var list = d.photos[slug] || [], want = ((d.content || {})[slug] || {}).cover;
+    if (want) {
+      for (var i = 0; i < list.length; i++) {
+        var all = [list[i]].concat(list[i].more || []);
+        for (var j = 0; j < all.length; j++) if (all[j].file === want) return all[j].src;
+      }
+    }
+    var liked = list.filter(function (p) { return p.group === 'like'; })[0] || list[0];
+    return liked ? liked.src : null;
+  }
+
   function render(d) {
     G.hideLoader();
     var ab = d.about || {};
@@ -19,7 +32,9 @@
 
     $('rooms').innerHTML = d.rooms.map(function (r) {
       var refs = (d.photos[r.slug] || []).length;
-      return '<li><a class="room-card" href="' + esc(G.roomHref('', r)) + '">' +
+      var cover = coverSrc(d, r.slug);
+      return '<li><a class="room-card' + (cover ? ' has-cover' : '') + '" href="' + esc(G.roomHref('', r)) + '">' +
+        (cover ? '<img class="room-cover" loading="lazy" src="' + esc(cover) + '" alt="">' : '') +
         '<h3>' + esc(r.name) + '</h3>' +
         '<dl>' + (typeof r.area === 'number' ? '<dt>Площа</dt><dd>' + esc(G.areaText(r)) + '</dd>' : '') +
         '<dt>Референси</dt><dd>' + (refs ? refs : 'поки немає') + '</dd></dl></a></li>';
