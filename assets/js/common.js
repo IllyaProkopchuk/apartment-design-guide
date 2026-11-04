@@ -102,7 +102,7 @@
   function loadGuide(root, roomSlug) {
     var b = window.GUIDE_DATA || null;
     var d = b ? {
-      site: b.site, rooms: b.rooms, palette: b.palette, taste: b.taste,
+      site: b.site, rooms: b.rooms, palette: b.palette, taste: b.taste, about: b.about,
       content: b.content || {}, photos: b.photos || {}, renders: b.renders || {},
       generatedAt: b.generatedAt, source: 'bundle'
     } : null;
@@ -114,13 +114,15 @@
       fetchJSON(root + 'data/site.json'),
       fetchJSON(root + 'data/rooms.json'),
       fetchJSON(root + 'data/palette.json'),
-      fetchJSON(root + 'data/taste.json')
+      fetchJSON(root + 'data/taste.json'),
+      fetchJSON(root + 'data/about.json').catch(function () { return null; })
     ];
     if (roomSlug) jobs.push(fetchJSON(root + 'rooms/' + encodeURIComponent(roomSlug) + '/room.json').catch(function () { return null; }));
     return Promise.all(jobs).then(function (res) {
       d = d || { content: {}, photos: {}, renders: {} };
       d.site = res[0]; d.rooms = res[1].rooms; d.palette = res[2]; d.taste = res[3];
-      if (roomSlug && res[4]) d.content[roomSlug] = res[4];
+      if (res[4]) d.about = res[4];
+      if (roomSlug && res[5]) d.content[roomSlug] = res[5];
       d.source = 'json';
       return d;
     }, function (err) {

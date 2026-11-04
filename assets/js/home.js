@@ -8,6 +8,8 @@
   G.loadGuide('').then(render, function () { G.loadError($('plan'), ''); });
 
   function render(d) {
+    var ab = d.about || {};
+    $('about-summary').innerHTML = (ab.summary || []).map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
 
     $('plan').innerHTML = G.planSVG(d.rooms, { root: '', image: d.site.planImage });
     if (d.site.planImage && d.site.planImage.caption) $('plan-caption').textContent = d.site.planImage.caption + '. Натисніть на кімнату, щоб відкрити її сторінку.';

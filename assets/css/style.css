@@ -356,3 +356,18 @@ main { padding: 32px 0 64px; }
 /* кілька ракурсів одного проєкту в одній картці */
 .ref-more { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 4px; padding: 4px; background: var(--surface-2); }
 .ref-more .ref-open img { aspect-ratio: 1 / 1; }
+
+/* ---------- навігація та сторінка «Про нас» ---------- */
+.site-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+.site-nav a { text-decoration: none; color: var(--muted); padding: 6px 12px; border-radius: 999px; font-size: .95rem; }
+.site-nav a:hover { color: var(--ink); background: var(--surface-2); }
+.site-nav a[aria-current="page"] { color: var(--ink); background: var(--surface-2); font-weight: 600; }
+.about-teaser .facts { margin-top: 0; }
+.about-toc ul { list-style: none; padding: 0; margin: 24px 0 8px; display: flex; flex-wrap: wrap; gap: 8px; }
+.about-toc a { display: inline-block; text-decoration: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 14px; font-size: .92rem; color: var(--ink); }
+.about-toc a:hover { border-color: var(--brass); }
+.about-section { margin-top: 40px; scroll-margin-top: 16px; }
+.about-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+.about-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; min-width: 0; }
+.about-card h3 { font-size: 1.05rem; }
+@media print { .about-card { break-inside: avoid; box-shadow: none; } }

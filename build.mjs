@@ -149,6 +149,7 @@ async function main() {
   const { rooms } = await readJSON('data/rooms.json');
   const palette = await readJSON('data/palette.json');
   const taste = await readJSON('data/taste.json');
+  const about = await readJSON('data/about.json');
   const template = await readFile(path.join(ROOT, 'templates/room.html'), 'utf8');
 
   const seen = new Set();
@@ -190,7 +191,7 @@ async function main() {
     }
   }
 
-  const bundle = { generatedAt: new Date().toISOString(), site, rooms, palette, taste, content, photos, renders };
+  const bundle = { generatedAt: new Date().toISOString(), site, rooms, palette, taste, about, content, photos, renders };
   await writeFile(
     path.join(ROOT, 'data/bundle.js'),
     '// Згенеровано build.mjs — не редагуйте вручну. Джерело: data/*.json і rooms/*/\n' +
