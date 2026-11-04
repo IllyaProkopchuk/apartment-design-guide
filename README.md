@@ -70,7 +70,7 @@ python3 -m http.server 8000
 
 Рендери кладіть так само в `rooms/<slug>/renders/`: вони показуються окремим блоком «Рендери».
 
-Slug-и кімнат: `vitalnia-kukhnia`, `spalnia`, `dytiacha-kabinet`, `peredpokii`, `vanna-tualet` (ванна й туалет поки однією сторінкою), `pralnia-komora`.
+Slug-и кімнат: `vitalnia-kukhnia`, `spalnia`, `dytiacha-kabinet`, `peredpokii`, `vanna-tualet` (ванна й туалет однією сторінкою).
 
 ## Як змінити статус
 

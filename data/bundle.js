@@ -1,6 +1,6 @@
 // Згенеровано build.mjs — не редагуйте вручну. Джерело: data/*.json і rooms/*/
 window.GUIDE_DATA = {
- "generatedAt": "2026-11-04T13:31:12.138Z",
+ "generatedAt": "2026-11-04T13:33:36.535Z",
  "site": {
   "title": "Візуальний гід по дизайну квартири",
   "project": {
@@ -263,38 +263,6 @@ window.GUIDE_DATA = {
    "label": [
     456,
     297
-   ]
-  },
-  {
-   "id": "laundry-storage",
-   "slug": "pralnia-komora",
-   "name": "Пральня + комора",
-   "area": null,
-   "dimensions": "уточнити",
-   "status": "ідея",
-   "plan": [
-    [
-     [
-      693,
-      495
-     ],
-     [
-      945,
-      495
-     ],
-     [
-      945,
-      573
-     ],
-     [
-      693,
-      573
-     ]
-    ]
-   ],
-   "label": [
-    819,
-    534
    ]
   }
  ],
@@ -775,25 +743,6 @@ window.GUIDE_DATA = {
     "це дуже гарно, колір плитки, дерево і тд.jpg": {
      "like": "дуже гарно: колір плитки, дерево і т. д."
     }
-   }
-  },
-  "pralnia-komora": {
-   "style": {
-    "directions": [],
-    "mood": ""
-   },
-   "palette": [],
-   "materials": {
-    "floor": "",
-    "walls": "",
-    "ceiling": ""
-   },
-   "furniture": [],
-   "lighting": [],
-   "questions": [],
-   "decision": {
-    "summary": "",
-    "date": ""
    }
   }
  },
@@ -1516,15 +1465,13 @@ window.GUIDE_DATA = {
     ],
     "dislikes": []
    }
-  ],
-  "pralnia-komora": []
+  ]
  },
  "renders": {
   "vitalnia-kukhnia": [],
   "spalnia": [],
   "dytiacha-kabinet": [],
   "peredpokii": [],
-  "vanna-tualet": [],
-  "pralnia-komora": []
+  "vanna-tualet": []
  }
 };
