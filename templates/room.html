@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Цей файл згенеровано з templates/room.html скриптом build.mjs. Не редагуйте вручну: зміни зникнуть. -->
+  <title>{{NAME}} · Візуальний гід квартири</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body data-page="room" data-slug="{{SLUG}}">
+  <a class="skip" href="#main">Перейти до змісту</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span class="brand-mark" aria-hidden="true"></span>Квартира · візуальний гід</a>
+      <span class="header-note">для обговорення з дизайнеркою</span>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <nav class="crumbs no-print" aria-label="Навігація"><a href="../../index.html">← План квартири</a></nav>
+    <div id="app"><h1>{{NAME}}</h1><p class="empty">Завантаження…</p></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">Площі приблизні (±10%), точні дані — у DWG дизайнера.</div>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Перегляд зображення">
+    <button class="lightbox-close" type="button" aria-label="Закрити">×</button>
+    <figure><img alt=""><figcaption></figcaption></figure>
+  </dialog>
+
+  <script src="../../data/bundle.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/room.js"></script>
+</body>
+</html>

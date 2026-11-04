@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Візуальний гід по дизайну квартири</title>
+  <meta name="description" content="Візуальний гід по дизайну квартири: план, статуси кімнат, палітра і формула смаку.">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="home">
+  <a class="skip" href="#main">Перейти до змісту</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>Квартира · візуальний гід</a>
+      <span class="header-note">для обговорення з дизайнеркою</span>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <section class="section" aria-labelledby="intro-title">
+      <h1 id="intro-title">Візуальний гід по дизайну квартири</h1>
+      <p class="lead">Тут зібрано, як ми бачимо кожну кімнату: настрій, палітру, матеріали, референси й відкриті питання. Статус показує, на якому етапі рішення.</p>
+      <ul class="facts" id="facts"></ul>
+      <div class="notice" role="note">
+        <span class="notice-icon" aria-hidden="true">≈</span>
+        <p><strong>Площі приблизні: похибка до ±10%.</strong><span id="area-note">Точні розміри й площі — у DWG-кресленні дизайнера.</span></p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="plan-title">
+      <div class="section-head">
+        <h2 id="plan-title">План квартири</h2>
+        <div class="plan-tabs no-print" role="tablist" aria-label="Вигляд плану">
+          <button type="button" role="tab" id="tab-schema" aria-controls="panel-schema" aria-selected="true">Схема</button>
+          <button type="button" role="tab" id="tab-drawing" aria-controls="panel-drawing" aria-selected="false">Креслення</button>
+        </div>
+      </div>
+      <div class="plan-frame">
+        <div id="panel-schema" role="tabpanel" aria-labelledby="tab-schema">
+          <div id="plan"><p class="empty">Завантаження схеми…</p></div>
+        </div>
+        <div id="panel-drawing" role="tabpanel" aria-labelledby="tab-drawing" hidden>
+          <div class="plan-drawing">
+            <img id="plan-img" alt="Креслення квартири від INSHA Design Studio, варіант 3" hidden>
+            <div class="plan-drawing-empty" id="plan-empty">
+              <p><strong>Креслення ще не додано.</strong></p>
+              <p class="small">Покладіть файл <code>plan/plan.svg</code> або <code>plan/plan.png</code> — він зʼявиться тут автоматично.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="plan-caption" id="plan-pdf"></p>
+      <p class="plan-caption">Схема умовна й не в масштабі: розташування кімнат приблизне, вона лише для навігації. Натисніть на кімнату, щоб відкрити її сторінку.</p>
+      <div id="legend"></div>
+    </section>
+
+    <section class="section" aria-labelledby="rooms-title">
+      <div class="section-head">
+        <h2 id="rooms-title">Кімнати</h2>
+        <span class="progress" id="progress"></span>
+      </div>
+      <ul class="room-grid" id="rooms"></ul>
+    </section>
+
+    <section class="section" aria-labelledby="palette-title">
+      <div class="section-head">
+        <h2 id="palette-title">Загальна палітра квартири</h2>
+        <span id="palette-status"></span>
+      </div>
+      <p class="muted" id="palette-note"></p>
+      <ul class="swatches" id="palette"></ul>
+    </section>
+
+    <section class="section" aria-labelledby="taste-title">
+      <h2 id="taste-title">Формула смаку</h2>
+      <p class="muted" id="taste-intro"></p>
+      <ol class="formula" id="formula"></ol>
+
+      <div class="section-head" style="margin-top:32px">
+        <h3 id="styles-title">Стилі 2026, які розглядаємо</h3>
+      </div>
+      <p class="muted small" id="styles-note"></p>
+      <ul class="styles" id="styles"></ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">Площі приблизні (±10%), точні дані — у DWG дизайнера. <span id="generated"></span></div>
+  </footer>
+
+  <script src="data/bundle.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/home.js"></script>
+</body>
+</html>

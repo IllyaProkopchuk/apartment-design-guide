@@ -1,0 +1,100 @@
+{
+  "rooms": [
+    {
+      "id": "living-kitchen",
+      "slug": "vitalnia-kukhnia",
+      "name": "Вітальня-кухня",
+      "area": null,
+      "dimensions": "уточнити",
+      "status": "ідея",
+      "plan": {
+        "x": 24,
+        "y": 24,
+        "w": 536,
+        "h": 326
+      }
+    },
+    {
+      "id": "bedroom",
+      "slug": "spalnia",
+      "name": "Спальня",
+      "area": null,
+      "dimensions": "уточнити",
+      "status": "ідея",
+      "plan": {
+        "x": 580,
+        "y": 24,
+        "w": 396,
+        "h": 286
+      }
+    },
+    {
+      "id": "kids-office",
+      "slug": "dytiacha-kabinet",
+      "name": "Дитяча / кабінет",
+      "planLabel": [
+        "Дитяча /",
+        "кабінет"
+      ],
+      "area": null,
+      "dimensions": "уточнити",
+      "status": "ідея",
+      "plan": {
+        "x": 640,
+        "y": 330,
+        "w": 336,
+        "h": 266
+      }
+    },
+    {
+      "id": "hallway",
+      "slug": "peredpokii",
+      "name": "Передпокій",
+      "area": null,
+      "dimensions": "уточнити",
+      "status": "ідея",
+      "plan": {
+        "x": 360,
+        "y": 370,
+        "w": 260,
+        "h": 226
+      }
+    },
+    {
+      "id": "bath-wc",
+      "slug": "vanna-tualet",
+      "name": "Ванна + туалет",
+      "planLabel": [
+        "Ванна +",
+        "туалет"
+      ],
+      "area": null,
+      "dimensions": "уточнити",
+      "status": "ідея",
+      "plan": {
+        "x": 24,
+        "y": 370,
+        "w": 190,
+        "h": 226
+      }
+    },
+    {
+      "id": "laundry-storage",
+      "slug": "pralnia-komora",
+      "name": "Пральня + комора",
+      "planLabel": [
+        "Пральня",
+        "+ комора"
+      ],
+      "area": null,
+      "dimensions": "уточнити",
+      "status": "ідея",
+      "plan": {
+        "x": 234,
+        "y": 370,
+        "w": 106,
+        "h": 226
+      }
+    }
+  ]
+}
