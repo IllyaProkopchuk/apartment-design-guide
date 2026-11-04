@@ -58,18 +58,19 @@
     out.push('<image href="' + esc(root + img.src) + '" x="0" y="0" width="' + W + '" height="' + H + '" preserveAspectRatio="xMidYMid meet"/>');
 
     var labels = [];
-    rooms.forEach(function (r) {
+    var ZONES = ['#B5583A', '#7E8C6A', '#7F98AE', '#8C3B3F', '#B08D57', '#5A3E2B', '#A4687A'];
+    rooms.forEach(function (r, idx) {
       if (!r.plan || !r.plan.length) return;
       var s = status(r.status);
       var cls = 'plan-room status-' + s.cls + (current === r.slug ? ' is-current' : '') + (current && current !== r.slug ? ' is-dim' : '');
-      out.push('<a class="' + cls + '" href="' + esc(roomHref(root, r)) + '" aria-label="' + esc(r.name) + '"' +
+      out.push('<a class="' + cls + '" style="--zone:' + ZONES[idx % ZONES.length] + '" href="' + esc(roomHref(root, r)) + '" aria-label="' + esc(r.name) + '"' +
         (current === r.slug ? ' aria-current="page"' : '') + '>');
       out.push('<title>' + esc(r.name) + '</title>');
       r.plan.forEach(function (poly) {
         out.push('<polygon points="' + poly.map(function (p) { return p.join(','); }).join(' ') + '"/>');
       });
       out.push('</a>');
-      if (!opts.compact && r.label) labels.push({ r: r, s: s });
+      if (!opts.compact && r.label) labels.push({ r: r, s: s, c: ZONES[idx % ZONES.length] });
     });
 
     // Підписи окремим шаром поверх зон, щоб не перекривалися сусідніми полігонами.
@@ -77,7 +78,7 @@
       var x = l.r.label[0], y = l.r.label[1];
       var name = l.r.name;
       var fs = 19, w = name.length * fs * 0.56 + 24, h = fs * 1.9;
-      out.push('<a class="plan-label status-' + l.s.cls + '" href="' + esc(roomHref(root, l.r)) + '" tabindex="-1" aria-hidden="true">' +
+      out.push('<a class="plan-label status-' + l.s.cls + '" style="--zone:' + l.c + '" href="' + esc(roomHref(root, l.r)) + '" tabindex="-1" aria-hidden="true">' +
         '<rect x="' + (x - w / 2) + '" y="' + (y - h / 2) + '" width="' + w + '" height="' + h + '" rx="10"/>' +
         '<text class="t-name" x="' + x + '" y="' + (y + fs * 0.35) + '" text-anchor="middle" font-size="' + fs + '">' + esc(name) + '</text></a>');
     });
