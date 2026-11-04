@@ -144,26 +144,15 @@
       setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
     }, Math.max(0, LOADER_MIN_MS - (now - loaderStart)));
   }
-  // Фрази лоадера: випадкова на старті, далі змінюються, поки лоадер видно.
+  // Фрази лоадера: одна випадкова на кожне відкриття сторінки.
   var LOADER_PHRASES = [
     'зараз, зараз', 'ща буде', 'оп, давай давай', 'ще трошки', 'вже майже',
     'кіт сів на клавіатуру', 'розкладаємо плитку', 'шукаємо ідеальну теракоту',
     'підкручуємо підсвітку', 'клеїмо рейки', 'мейнкун перевіряє фото', 'ну шо, поїхали'
   ];
-  (function startLoaderPhrases() {
+  (function pickLoaderPhrase() {
     var el = document.querySelector('#loader .loader-phrase');
-    if (!el) return;
-    var last = -1;
-    function next() {
-      var i;
-      do { i = Math.floor(Math.random() * LOADER_PHRASES.length); } while (i === last && LOADER_PHRASES.length > 1);
-      last = i; el.textContent = LOADER_PHRASES[i];
-    }
-    next();
-    var timer = setInterval(function () {
-      if (!document.getElementById('loader')) { clearInterval(timer); return; }
-      next();
-    }, 650);
+    if (el) el.textContent = LOADER_PHRASES[Math.floor(Math.random() * LOADER_PHRASES.length)];
   })();
 
   // Запобіжник: лоадер не висить довше 5 секунд, навіть якщо щось пішло не так.
