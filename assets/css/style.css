@@ -548,3 +548,8 @@ main.wrap { padding-top: 32px; padding-bottom: 80px; }
 .zone-block > .zone-title { margin-top: 0; }
 .zone-sub { font-family: var(--font-sans); font-size: .85rem; letter-spacing: .04em; text-transform: uppercase; color: var(--terracotta); margin: 14px 0 6px; }
 .zone-sub:first-child { margin-top: 0; }
+
+/* кіт замість смайлика у вступі */
+.lead-cat { display: inline-block; width: 2.6em; height: 2.6em; border-radius: 50%; object-fit: cover; vertical-align: middle; margin-left: .25em; box-shadow: 0 0 0 3px var(--brass-tint); transition: transform .2s ease; }
+.lead-cat:hover { transform: scale(1.8) rotate(-6deg); }
+@media (prefers-reduced-motion: reduce) { .lead-cat:hover { transform: none; } }
